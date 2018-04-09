@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+	    <meta charset="UTF-8">
+		<title>angular级联菜单</title>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/angular.min.js"></script>
+		<script src="data2.js"></script>
+	</head>
+	<body ng-app="app">
+	    <div ng-controller="myctr">
+		    
+		    <select ng-options="v['name'] for v in dataarr" ng-model="onearr">
+                <option >默认</option>
+            </select>
+			<select ng-options="i['name'] for i in onearr['items']" ng-model="twoarr">
+                <option>默认</option>
+            </select>
+            <select ng-options="i for i in twoarr['items']" ng-model="threearr">
+                <option>默认</option>
+            </select>
+            <button ng-click="subfn()">提交</button>			
+		</div>
+	    <script>
+		    var app = angular.module("app",["dataapp"]);
+			
+			app.controller("myctr",['$scope','$timeout','data2',function($scope,$timeout,data){
+			    $scope.onearr = data[0];
+				
+				$scope.dataarr = data;
+				$scope.$watch('onearr',function(a,b){
+				    $scope.twoarr = a['items'][0];
+				    $scope.threearr = $scope.twoarr['items'][0];
+				})
+				$scope.$watch('twoarr',function(a,b){
+				    $scope.threearr = a['items'][0];
+				})
+				$scope.subfn = function(){
+				    console.log($scope.onearr.name,$scope.twoarr.name,$scope.threearr);
+				}
+				console.log($scope.dataarr.length);
+			}]);
+		</script>
+	</body>
+</html>
